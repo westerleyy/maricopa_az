@@ -1,0 +1,5 @@
+"0","variables <- load_variables(2019, ""acs3"", cache = T)
+"
+"2","Error in load_variables(2019, ""acs3"", cache = T) : 
+  The current acs3 survey contains data from 2012-2013. Please select a different year.
+"

@@ -1,0 +1,24 @@
+"0","maricopa_basics_2012 <- get_acs(geography = ""tract"",
+                                state = ""AZ"",
+                                county = ""Maricopa"",
+                                year = 2012,
+                                variables = c(med_income = ""B19013_001"", med_age = ""B01002_001"", total_pop = ""B00001_001""))
+"
+"2","Getting data from the 2008-2012 5-year ACS
+"
+"2","Using FIPS code '04' for state 'AZ'
+"
+"2","Using FIPS code '013' for 'Maricopa County'
+"
+"0","maricopa_demographics_2012 <- get_acs(geography = ""tract"","
+"0","                                      state = ""AZ"","
+"0","                                      county = ""Maricopa"","
+"0","                                      year = 2012,"
+"0","                                      variables = c(white = ""B03002_003"", hispanic = ""B03002_012"", black = ""B03002_004"", "
+"0","                                                    asian = ""B03002_006"", native = ""B03002_005""))"
+"2","Getting data from the 2008-2012 5-year ACS
+"
+"2","Using FIPS code '04' for state 'AZ'
+"
+"2","Using FIPS code '013' for 'Maricopa County'
+"

@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1602073312474.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "29D6D5F0",
+    "lastKnownWriteTime" : 13229757704831081,
+    "last_content_update" : 1602073312474,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "E87BBF26",
+        "caption" : "maricopa_demographics_2017",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=maricopa_demographics_2017&cache_key=E87BBF26",
+        "displayedObservations" : 4580,
+        "environment" : "",
+        "object" : "maricopa_demographics_2017",
+        "preview" : 0,
+        "totalObservations" : 4580,
+        "variables" : 5
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}
