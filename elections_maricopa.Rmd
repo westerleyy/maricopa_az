@@ -1,0 +1,49 @@
+---
+title: "elections_maricopa"
+author: "Wesley Chioh"
+date: "October 17, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+
+maricopa_2012_results <- read_csv("Maricopa_2012.txt")
+maricopa_2014_results <- read_tsv("Maricopa_2014.txt")
+maricopa_2016_results <- read_tsv("Maricopa_2016.txt")
+maricopa_2018_results <- read_tsv("Maricopa_2018.txt")
+```
+
+## Maricopa County's Elections
+
+First, I will try to parse for congressinal elections in each of the 724 precincts in Maricopa County, AZ. 
+
+```{r Congress}
+congress_filter <- function(df){
+  congress_races <- df %>%
+    filter(str_detect(CONTEST_FULL_NAME, "US Rep ")) %>%
+    select(PRECINCT_NAME, CANDIDATE_FULL_NAME, candidate_party_id, CONTEST_FULL_NAME, TOTAL, PRECINCT_ID, CONTEST_TOTAL) %>%
+    mutate(TOTAL_PCT = TOTAL/CONTEST_TOTAL) %>%
+    group_by(PRECINCT_ID) %>%
+    arrange(desc(TOTAL_PCT)) %>%
+    mutate(WINNER = first(CANDIDATE_FULL_NAME)) %>%
+    ungroup() %>%
+    arrange(PRECINCT_ID)
+  congress_races
+}
+maricopa_2012_congress <- congress_filter(maricopa_2012_results)
+maricopa_2014_congress <- congress_filter(maricopa_2014_results)
+maricopa_2016_congress <- congress_filter(maricopa_2016_results)
+maricopa_2018_congress <- congress_filter(maricopa_2018_results)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

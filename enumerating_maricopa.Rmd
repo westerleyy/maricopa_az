@@ -36,6 +36,7 @@ maricopa_basics_2018 <- get_acs(geography = "tract",
                                 state = "AZ",
                                 county = "Maricopa",
                                 year = 2018,
+                                geometry = T,
                                 variables = c(med_income = "B19013_001", med_age = "B01002_001", total_pop = "B00001_001"))
 maricopa_demographics_2018 <- get_acs(geography = "tract",
                                       state = "AZ",
