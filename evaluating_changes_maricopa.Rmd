@@ -1,0 +1,71 @@
+---
+title: "analyzing_changes"
+author: "Wesley Chioh"
+date: "October 19, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(tidycensus)
+
+options(tigris_use_cache = T)
+
+# loading election data
+maricopa_2012_congress <- read_csv("./CongressRaceResults/maricopa_2012_corrected.csv")
+maricopa_2014_congress <- read_csv("./CongressRaceResults/maricopa_2014_corrected.csv")
+maricopa_2016_congress <- read_csv("./CongressRaceResults/maricopa_2016_corrected.csv")
+maricopa_2018_congress <- read_csv("./CongressRaceResults/maricopa_2018_corrected.csv")
+
+# loading demographic data
+maricopa_basics_2012 <- readRDS("./Demographics/maricopa_basics_2012.RDS") %>%
+  .[[1]]
+maricopa_basics_2013 <- readRDS("./Demographics/maricopa_basics_2013.RDS") %>%
+  .[[1]]
+maricopa_basics_2014 <- readRDS("./Demographics/maricopa_basics_2014.RDS") %>%
+  .[[1]]
+maricopa_basics_2015 <- readRDS("./Demographics/maricopa_basics_2015.RDS") %>%
+  .[[1]]
+maricopa_basics_2016 <- readRDS("./Demographics/maricopa_basics_2016.RDS") %>%
+  .[[1]]
+maricopa_basics_2017 <- readRDS("./Demographics/maricopa_basics_2017.RDS") %>%
+  .[[1]]
+maricopa_basics_2018 <- readRDS("./Demographics/maricopa_basics_2018.RDS") %>%
+  .[[1]]
+
+maricopa_demographics_2012 <- readRDS("./Demographics/maricopa_demographics_2012.RDS") %>%
+  .[[1]]
+maricopa_demographics_2013 <- readRDS("./Demographics/maricopa_demographics_2013.RDS") %>%
+  .[[1]]
+maricopa_demographics_2014 <- readRDS("./Demographics/maricopa_demographics_2014.RDS") %>%
+  .[[1]]
+maricopa_demographics_2015 <- readRDS("./Demographics/maricopa_demographics_2015.RDS") %>%
+  .[[1]]
+maricopa_demographics_2016 <- readRDS("./Demographics/maricopa_demographics_2016.RDS") %>%
+  .[[1]]
+maricopa_demographics_2017 <- readRDS("./Demographics/maricopa_demographics_2017.RDS") %>%
+  .[[1]]
+maricopa_demographics_2018 <- readRDS("./Demographics/maricopa_demographics_2018.RDS") %>%
+  .[[1]]
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
