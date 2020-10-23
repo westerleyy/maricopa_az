@@ -14,3 +14,11 @@ So what has changed in Maricopa County over the past few presidential cycles tha
 5. Can we construct a machine learning model to predict election results?  
 6. Is there spatial autocorrelation in terms of voting records? I.e. do people of a similar political stripe live together?  
 7. AZ's 5th - 9th congressional districts lie fully within Maricopa County, AZ. How competitive are they? Can we construct a means of measuring competitiveness?  
+
+### Steps
+1. Generate research questions
+2. Collect data
+3. Group questions together (1,2,3,7) (4,5,6)
+4. How to integrate new precincts? 
+5. Spatial autocorrelation in Python, R, or QGIS
+6. Limit top/bottom 10 precincts to see biggest political swings and changes in voters
