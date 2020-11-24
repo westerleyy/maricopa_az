@@ -1,0 +1,112 @@
+---
+title: "Comparing Maricopa County Between 2016 and 2020"
+author: "Wesley Chioh"
+date: "11/24/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(leaflet)
+library(sf)
+library(RColorBrewer)
+library(ggplot2)
+library(kableExtra)
+
+# reading in data
+## Maricopa Co. data dump
+maricopa_2020_11132020 <- read_tsv("Maricopa_2020_Provisional_111320.txt")
+maricopa_2016 <- read_tsv("Maricopa_2016.txt")
+
+## Shapefiles
+maricopa_precincts_2018 <- read_sf("./Shapefiles/VotingPrecincts/VotingPrecincts.shp")
+maricopa_precincts_2018 <- st_transform(maricopa_precincts_2018, 4326)
+maricopa_precincts_2016 <- read_sf("./Shapefiles/VotingPrecincts/HistoricalVotingPrecincts_12thru16.shp")
+maricopa_precincts_2016 <- st_transform(maricopa_precincts_2016, 4326)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r df slimming, echo = FALSE}
+# extracting congressional candidate per precinct
+congress_2020 <- function(results, contest_name = "ContestName"){
+  voteshare_df <- results %>%
+    filter(str_detect(contest_name, "^US Rep"),
+           CandidateAffiliation %in% c("REP", "DEM")) %>%
+    select(PrecinctId, PrecinctName, contest_name, CandidateName, Votes, `Votes_EARLY VOTE`, `Votes_ELECTION DAY`, Votes_PROVISIONAL, `Turnout_EARLY VOTE`, `Turnout_ELECTION DAY`, Registered, Turnout, TurnoutPerc) %>%
+    na.omit()
+}
+
+congress_2016 <- function(results, contest_name = "CONTEST_TYPE"){
+  voteshare_df <- results %>%
+    filter(str_detect(contest_name, "^US Rep"),
+           candidate_party_id %in% c(1, 2)) %>%
+    select(PRECINCT_NAME, contest_name, CANDIDATE_FULL_NAME, TOTAL, CONTEST_TOTAL) %>%
+    na.omit()
+}
+
+# extracting congressional race per precinct 
+cd_per_precinct <- function(cd_results){
+  cd_per_precinct <- cd_results %>%
+    select(PrecinctId, PrecinctName, ContestName) %>%
+    unique()
+  cd_per_precinct
+}
+
+# extracting presidential candidate and calculating pct votes
+presidential <- function(results){
+  voteshare_df <- results %>%
+    filter(ContestName == "Presidential Electors",
+           CandidateId %in% c(1, 2)) %>%
+    select(PrecinctId, PrecinctName, CandidateName, Votes, `Votes_EARLY VOTE`, `Votes_ELECTION DAY`, Votes_PROVISIONAL, `Turnout_EARLY VOTE`, `Turnout_ELECTION DAY`, Registered, Turnout, TurnoutPerc) %>%
+    na.omit()
+  
+  voteshare_df
+}
+
+candidate_voteshare <- function(results, candidate){
+  voteshare_df <- results %>%
+    filter(CandidateName == candidate) %>%
+    mutate(PctVotes = round(Votes/Turnout, 2),
+           PrecinctId = substr(PrecinctName, 1, 4))
+  
+  voteshare_df
+}
+
+# latest data dump
+maricopa_2020_11132020_congress <- maricopa_2020_11132020 %>%
+  congress_2020()
+
+maricopa_2016_congress <- maricopa_2016 %>%
+  congress_2016(contest_name = "CONTEST_FULL_NAME")
+
+cd_per_precinct_2020 <- maricopa_2020_11132020_congress %>%
+  cd_per_precinct()
+
+cd_per_precinct_2016 <- maricopa_2016_congress %>%
+  cd_per_precinct()
+
+maricopa_2020_11132020_narrow <- maricopa_2020_11132020 %>%
+  presidential()
+
+maricopa_2020_dems_111320 <- maricopa_2020_11132020_narrow %>%
+  candidate_voteshare(., "BIDEN / HARRIS")
+
+maricopa_2020_reps_111320 <- maricopa_2020_11132020_narrow %>%
+  candidate_voteshare(., "TRUMP / PENCE")
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

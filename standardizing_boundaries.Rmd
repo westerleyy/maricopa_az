@@ -1,0 +1,62 @@
+---
+title: "Precinct Boundaries"
+author: "Wesley Chioh"
+date: "October 25, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(tidycensus)
+library(sf)
+library(foreign)
+```
+
+## Precinct Boundaries
+
+Each county in Arizona is broken down into precincts. There are over 700 precincts in Maricopa Co., AZ. The number and boundary of precincts have held steady over time between 2012 and 2016. However, they were an additional 24 or so precincts in 2018. To facilitate visualization over time, it is important to standardize to a single set of precinct boundaries, namely 2012-2016.  
+
+```{r attribute tables}
+# reading in attribute tables
+# isolating just the name of precincts
+
+historical_precincts <- read.dbf("./Shapefiles/VotingPrecincts/HistoricalVotingPrecincts_12thru16.dbf", as.is = T)
+historical_precincts_df <- historical_precincts %>%
+  select(BdName)
+current_precincts <- read.dbf("./Shapefiles/VotingPrecincts/VotingPrecincts.dbf", as.is = T)
+current_precincts_df <- current_precincts %>%
+  select(BdName)
+constant_precincts <- read.dbf("./Shapefiles/VotingPrecincts/ConstantPrecincts.dbf", as.is = T)
+
+# new precincts
+## two step is necessary because there are those in 2016 which arent in 2018, and vice versa
+missing_precincts <- anti_join(historical_precincts_df, current_precincts_df) %>%
+  unlist(use.names = F)
+new_precincts <- anti_join(current_precincts_df, historical_precincts_df) %>%
+  unlist(use.names = F)
+
+# precincts that have not changed
+constant_precincts <- inner_join(historical_precincts_df, current_precincts_df)
+```
+
+### Electorate Identification
+
+To identify where :
+
+```{r pressure, echo=FALSE}
+maricopa_2018_congress_filtered <- maricopa_2018_congress %>%
+  mutate(PRECINCT = substr(PRECINCT_NAME, 6, nchar(PRECINCT_NAME))) %>%
+  filter(PRECINCT %in% new_precincts)
+
+total_electorate <- maricopa_2018_congress %>%
+  summarise(VotesCast = sum(CONTEST_TOTAL))
+
+constant_electorate <- maricopa_2018_congress %>%
+  mutate(PRECINCT = substr(PRECINCT_NAME, 6, nchar(PRECINCT_NAME))) %>%
+  filter(PRECINCT %in% unlist(constant_precincts, use.names = F)) %>%
+  summarise(VotesCast = sum(CONTEST_TOTAL))
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

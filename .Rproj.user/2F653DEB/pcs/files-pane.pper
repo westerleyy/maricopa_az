@@ -1,9 +1,9 @@
 {
-    "path" : "~/RStudio/MaricopaCounty",
-    "sortOrder" : [
+    "path": "~/RStudio/MaricopaCounty",
+    "sortOrder": [
         {
-            "ascending" : true,
-            "columnIndex" : 2
+            "ascending": true,
+            "columnIndex": 2
         }
     ]
 }

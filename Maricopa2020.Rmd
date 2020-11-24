@@ -1,0 +1,254 @@
+---
+title: "Maricopa2020"
+author: "Wesley Chioh"
+date: "November 5, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(leaflet)
+library(sf)
+library(RColorBrewer)
+library(ggplot2)
+library(kableExtra)
+
+# reading in data
+## Maricopa Co. data dump
+maricopa_2020_11052020 <- read_tsv("Maricopa_2020_Provisional_110520.txt")
+maricopa_2020_11062020 <- read_tsv("Maricopa_2020_Provisional_110620.txt")
+maricopa_2020_11132020 <- read_tsv("Maricopa_2020_Provisional_111320.txt")
+
+## Shapefiles
+maricopa_precincts_2018 <- read_sf("./Shapefiles/VotingPrecincts/VotingPrecincts.shp")
+maricopa_precincts_2018 <- st_transform(maricopa_precincts_2018, 4326)
+
+## Historical Results
+maricopa_2018_congress <- read_csv("./CongressRaceResults/maricopa_2018_corrected.csv")
+maricopa_2018_governor <- read_csv("./CongressRaceResults/maricopa_2018_governor.csv")
+maricopa_2018_voter_registration <- read_csv("./CongressRaceResults/maricopa_2018_voter_registration.csv")
+```
+
+## Maricopa 2020
+
+The first step is to slim down the dataset to just the crucial stuff.  
+1. Only Biden and Trump votes will be included  
+2. Only look out for the number of registered voters, votes counted, the number of early votes, and unspoilt votes in each precinct. 
+
+```{r df slimming, echo = FALSE}
+# extracting congressional candidate per precinct
+congress <- function(results, contest_name = "ContestName"){
+  voteshare_df <- results %>%
+    filter(str_detect(contest_name, "^US Rep"),
+           CandidateAffiliation %in% c("REP", "DEM")) %>%
+    select(PrecinctId, PrecinctName, ContestName, CandidateName, Votes, `Votes_EARLY VOTE`, `Votes_ELECTION DAY`, Votes_PROVISIONAL, `Turnout_EARLY VOTE`, `Turnout_ELECTION DAY`, Registered, Turnout, TurnoutPerc) %>%
+    na.omit()
+}
+
+# extracting congressional race per precinct 
+cd_per_precinct <- function(cd_results){
+  cd_per_precinct <- cd_results %>%
+    select(PrecinctId, PrecinctName, ContestName) %>%
+    unique()
+  cd_per_precinct
+}
+
+# extracting presidential candidate and calculating pct votes
+presidential <- function(results){
+  voteshare_df <- results %>%
+    filter(ContestName == "Presidential Electors",
+           CandidateId %in% c(1, 2)) %>%
+    select(PrecinctId, PrecinctName, CandidateName, Votes, `Votes_EARLY VOTE`, `Votes_ELECTION DAY`, Votes_PROVISIONAL, `Turnout_EARLY VOTE`, `Turnout_ELECTION DAY`, Registered, Turnout, TurnoutPerc) %>%
+    na.omit()
+  
+  voteshare_df
+}
+
+candidate_voteshare <- function(results, candidate){
+  voteshare_df <- results %>%
+    filter(CandidateName == candidate) %>%
+    mutate(PctVotes = round(Votes/Turnout, 2),
+           PrecinctId = substr(PrecinctName, 1, 4))
+  
+  voteshare_df
+}
+
+# previous data dumps
+maricopa_2020_11052020_narrow <- maricopa_2020_11052020 %>%
+  presidential()
+
+maricopa_2020_dems_110520 <- maricopa_2020_11052020_narrow %>%
+  candidate_voteshare(., "BIDEN / HARRIS")
+
+maricopa_2020_reps_110520 <- maricopa_2020_11052020_narrow %>%
+  candidate_voteshare(., "TRUMP / PENCE")
+
+maricopa_2020_11062020_narrow <- maricopa_2020_11062020 %>%
+  presidential()
+
+maricopa_2020_dems_110620 <- maricopa_2020_11062020_narrow %>%
+  candidate_voteshare(., "BIDEN / HARRIS")
+
+maricopa_2020_reps_110620 <- maricopa_2020_11062020_narrow %>%
+  candidate_voteshare(., "TRUMP / PENCE")
+
+# latest data dump
+maricopa_2020_11132020_congress <- maricopa_2020_11132020 %>%
+  congress()
+cd_per_precinct_2020 <- maricopa_2020_11132020_congress %>%
+  cd_per_precinct()
+```
+
+## Questions  
+
+1. Where are the Democratic leaning precincts at?  
+2. Where might the yet-to-be-counted votes be, based on historical voting patterns?  
+3. How might these yet-to-be-counted votes look like?  
+  
+## Current Situation  
+  
+How has each precinct voted?  
+  
+```{r mapping maricopa}
+maricopa_2020_dems_shp <- left_join(maricopa_precincts_2018, maricopa_2020_dems_110620[, c("PrecinctId", "PctVotes")], by = c("BdVal" = "PrecinctId"))
+
+scale_range_elec = c(0,1)
+binpal <- colorNumeric(c("#b2182b", "#f4a582", "#92c5de", "#2166ac"), domain = scale_range_elec)
+
+leaflet() %>%
+  addProviderTiles(providers$Stamen.Toner) %>%
+  addPolygons(data = maricopa_2020_dems_shp, 
+              stroke = F, color = "white", weight = 0.2, opacity = 1, fillColor = ~binpal(PctVotes),
+              label = ~PctVotes) %>%
+  addLegend("bottomright", pal = binpal, values = maricopa_2020_dems_shp$PctVotes, title = "Pct Dem Votes", opacity = 0.7)
+
+```
+
+Based on historical data, voter turnout in Arizona during Presidential election years is about 75%. Based on information pushed out by NYT, an estimated 2.05 million votes out of 2.6 million registered voters were cast. This is a turnout of approximately 79%. If we want to find out where the remaining votes are, then we have to look for precincts where turnout is suspiciously low because that is where votes are likely to not have been counted yet.  
+  
+This is where the next tranche of votes in the county might come from. 
+```{r low turnout}
+low_turnout <- maricopa_2020_dems_110620 %>%
+  filter(TurnoutPerc < 0.79) %>%
+  select(PrecinctId, PrecinctName)
+
+maricopa_remaining <- inner_join(maricopa_precincts_2018, low_turnout, by = c("BdVal" = "PrecinctId")) 
+
+# mapping out these precincts
+leaflet() %>%
+  addProviderTiles(providers$Stamen.Toner) %>%
+  addPolygons(data = maricopa_remaining, color = "white", weight = 0.5, label = ~PrecinctName, fillColor = "grey")
+```
+  
+So, how many votes have been counted in these places so far and how many more can we expect? How have these precincts leaned in the past?    
+  
+```{r}
+outstanding_precincts <- maricopa_2020_11062020_narrow %>%
+  pivot_wider(names_from = CandidateName, values_from = Votes, id_cols = c(PrecinctId, TurnoutPerc, Turnout, PrecinctName, Registered)) %>%
+  filter(TurnoutPerc < 0.79) %>%
+  select(PrecinctId, PrecinctName, Registered, Turnout, `BIDEN / HARRIS`, `TRUMP / PENCE`) %>%
+  unique() %>%
+  group_by(PrecinctId) %>%
+  mutate(ExpectedTotalVotes = round(0.79*Registered),
+         ExpectedPendingVotes = ExpectedTotalVotes - Turnout) %>%
+  ungroup()
+
+outstanding_precincts_with2018 <- inner_join(outstanding_precincts, 
+                                             maricopa_2018_governor[, c("PRECINCT_NAME", "TOTAL_PCT_DEM", "TOTAL_PCT_REP")], 
+                                             by = c("PrecinctName" = "PRECINCT_NAME")) 
+
+outstanding_precincts_with2018_prediction <- outstanding_precincts_with2018 %>%
+  group_by(PrecinctId) %>%
+  mutate(ExpectedDem = round(TOTAL_PCT_DEM*ExpectedTotalVotes),
+         ExpectedRep = round(TOTAL_PCT_REP*ExpectedTotalVotes),
+         PendingDem = if_else(ExpectedDem > `BIDEN / HARRIS`, ExpectedDem - `BIDEN / HARRIS`, 0),
+         PendingRep = if_else(ExpectedRep > `TRUMP / PENCE`, ExpectedRep - `TRUMP / PENCE`, 0))
+
+# how democratic are these outstanding precincts?
+
+maricopa_remaining_lean <- inner_join(maricopa_remaining, outstanding_precincts_with2018_prediction, by = c("PrecinctName" = "PrecinctName")) 
+
+leaflet() %>%
+  addProviderTiles(providers$Stamen.Toner) %>%
+  addPolygons(data = maricopa_remaining_lean, 
+              stroke = F, color = "white", weight = 0.2, opacity = 1, fillColor = ~binpal(TOTAL_PCT_DEM),
+              label = ~TOTAL_PCT_DEM) %>%
+  addLegend("bottomright", pal = binpal, values = maricopa_2020_dems_shp$PctVotes, title = "2018 Midterm Dem Pct", opacity = 0.7)
+
+```
+  
+## Voter Registration  
+  
+In which precincts have we seen the largest gains in voters?  
+
+```{r voter registration}
+maricopa_2020_voter_registration <- maricopa_2020_dems_110620 %>%
+  select(PrecinctName, Registered, PctVotes) %>%
+  unique() %>%
+  na.omit()
+
+voter_registration_comparison <- inner_join(maricopa_2018_voter_registration, maricopa_2020_voter_registration, 
+                                            by = c("PRECINCT_NAME" = "PrecinctName"))
+colnames(voter_registration_comparison) <- c("PrecinctName", "PrecinctId", "RegVoters2018", "RegVoters2020", "PctDem2020")
+voter_registration_comparison <- voter_registration_comparison %>%
+  mutate(gains = RegVoters2020 - RegVoters2018)
+
+maricopa_2018_governor_dem <- maricopa_2018_governor[,c("PRECINCT_NAME", "TOTAL_PCT_DEM")]
+colnames(maricopa_2018_governor_dem) <- c("PrecinctName", "PctDem2018")
+
+voter_registration_comparison_2018 <- inner_join(voter_registration_comparison, maricopa_2018_governor_dem)
+
+voter_registration_comparison_2018_cut <- voter_registration_comparison_2018 %>%
+  group_by(PrecinctName) %>%
+  mutate(category = if_else(PctDem2020 > 0.5 & PctDem2018 > 0.5, "D-D", 
+                            if_else(PctDem2020 > 0.5 & PctDem2018 < 0.5, "R-D",
+                                    if_else(PctDem2020 < 0.5 & PctDem2018 > 0.5, "D-R", "R-R")))) %>%
+  na.omit()
+
+# tabling changes in voter registration by electoral drift
+voter_reg_changes <- voter_registration_comparison_2018_cut %>%
+  group_by(category) %>%
+  summarise(gains = sum(gains))
+
+voter_reg_changes %>%
+  kbl() %>%
+  kable_minimal() %>%
+  as_image()
+
+
+ggplot(voter_registration_comparison_2018, aes(x = PctDem2018, y = PctDem2020)) + 
+  geom_jitter(aes(size = gains)) + 
+  geom_abline(slope = 1, intercept = 0) + 
+  theme(panel.background = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()) + 
+  labs(x = "Prop. Votes for Dem Gov", y = "Prop. Votes for Dem Pres")
+
+# outstanding_precincts_voter_reg_gains <- voter_registration_comparison_2018 %>%
+#   filter(PrecinctName %in% unlist(outstanding_precincts$PrecinctName))
+# 
+# ggplot(outstanding_precincts_voter_reg_gains, aes(x = TotalPctDem, y = gains)) + 
+#   geom_point() + 
+#   theme(panel.background = element_blank(),
+#         panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank()) + 
+#   labs(x = "Prop. Votes for Dem Gov", y = "Voter Reg Gains")
+```
+  
+Where did the latest increase in votes come from?  
+  
+```{r Nov 6 Dump}
+maricopa_nov5 <- maricopa_2020_11052020_narrow %>%
+  select(PrecinctId, PrecinctName, Registered, CandidateName, Turnout, Votes)
+colnames(maricopa_nov5)[5:6] <- c("Nov5Turnout", "Nov5Votes")
+
+maricopa_nov6 <- maricopa_2020_11062020_narrow %>%
+  select(PrecinctId, PrecinctName, CandidateName, Turnout, Votes)
+colnames(maricopa_nov6)[4:5] <- c("Nov6Turnout", "Nov6Votes")
+
+nov6_diff <- inner_join(maricopa_nov5, maricopa_nov6, by = c("PrecinctName", "PrecinctId", "CandidateName"))
+nov6_diff <- nov6_diff %>%
+  mutate(newly_counted = Nov6Votes-Nov5Votes)
+```
+

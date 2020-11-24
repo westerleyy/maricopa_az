@@ -63,6 +63,50 @@ tidy_congress_election_data <- function(df, csv, location){
   tidy_df
 }
 
+# filter for gubernatorial races and basic calculations of winning margins
+governor_filter <- function(df){
+  governor_races <- df %>%
+    filter(str_detect(CONTEST_FULL_NAME, "Governor")) %>%
+    select(PRECINCT_NAME, CANDIDATE_FULL_NAME, candidate_party_id, CONTEST_FULL_NAME, TOTAL, PRECINCT_ID, CONTEST_TOTAL) %>%
+    mutate(TOTAL_PCT = ifelse(TOTAL != 0, TOTAL/CONTEST_TOTAL, 0)) %>%
+    group_by(PRECINCT_ID) %>%
+    arrange(desc(TOTAL)) %>%
+    mutate(CANDIDATE_PARTY = ifelse(candidate_party_id == 1, "REP",
+                                    ifelse(candidate_party_id == 2, "DEM", "OTHERS")), 
+            WINNER = first(CANDIDATE_FULL_NAME),
+            WINNING_PARTY = substr(WINNER, 1, 3),
+            MARGIN_PCT = first(TOTAL_PCT)-nth(TOTAL_PCT, n = 2),
+            MARGIN = first(TOTAL) - nth(TOTAL, n = 2)) %>%
+    ungroup() %>%
+    arrange(PRECINCT_ID)
+  # congress_races$TOTAL_PCT <- na_if(congress_races$TOTAL_PCT, NaN)
+  # congress_races$TOTAL_PCT <- replace_na(congress_races$TOTAL_PCT, 0)
+  # congress_races$MARGIN_PCT <- na_if(congress_races$MARGIN_PCT, NaN)
+  # congress_races$MARGIN_PCT <- replace_na(congress_races$MARGIN_PCT, 0)
+  governor_races
+}
+
+# pivot to wider table for each precinct
+tidy_governor_election_data <- function(df, csv, location){
+  tidy_df <- df %>%
+    filter(candidate_party_id %in% c(1, 2)) %>%
+    pivot_wider(id_cols = c(PRECINCT_NAME, CANDIDATE_FULL_NAME, CONTEST_FULL_NAME, CONTEST_TOTAL,
+                            WINNER, WINNING_PARTY, MARGIN_PCT, MARGIN
+                            ), 
+                values_from = c(CANDIDATE_FULL_NAME, TOTAL, TOTAL_PCT), 
+                names_from = CANDIDATE_PARTY)
+  tidy_df <- tidy_df[,c("PRECINCT_NAME", "CONTEST_FULL_NAME", "CANDIDATE_FULL_NAME_REP", "CANDIDATE_FULL_NAME_DEM", 
+                        "CONTEST_TOTAL", "TOTAL_REP", "TOTAL_DEM", "TOTAL_PCT_REP", "TOTAL_PCT_DEM", 
+                        "MARGIN", "MARGIN_PCT", "WINNER", "WINNING_PARTY"
+                        )]
+  if(csv == T){
+    write_csv(tidy_df, path = location)
+  }
+    
+  tidy_df
+}
+
+
 # The following precincts (years) were duplicated for some unidentifable reason. They will have to be corrected manually
 ## Precincts: SUNFLOWER (2012-2018), HICKIWAN (2014), LONE BUTTE (2014), TORTILLA FLAT (2014)
 
@@ -78,5 +122,16 @@ maricopa_2016_congress <- maricopa_2016_results %>%
 maricopa_2018_congress <- maricopa_2018_results %>%
   congress_filter() %>%
   tidy_congress_election_data(csv = T, location = "./CongressRaceResults/maricopa_2018.csv")
+
+
+maricopa_2018_governor <- maricopa_2018_results %>%
+  governor_filter() %>%
+  tidy_governor_election_data(csv = T, location = "./CongressRaceResults/maricopa_2018_governor.csv")
+
+maricopa_2018_voter_registration <- maricopa_2018_results %>%
+  filter(CONTEST_FULL_NAME == "Registration & Turnout") %>%
+  select(PRECINCT_NAME, PRECINCT_ID, CONTEST_TOTAL) %>%
+  unique()
+write_csv(maricopa_2018_voter_registration, "./CongressRaceResults/maricopa_2018_voter_registration.csv")
 
 ```
