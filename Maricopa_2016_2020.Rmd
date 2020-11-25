@@ -8,9 +8,9 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
-library(leaflet)
+#library(leaflet)
 library(sf)
-library(RColorBrewer)
+#library(RColorBrewer)
 library(ggplot2)
 library(kableExtra)
 
@@ -26,35 +26,55 @@ maricopa_precincts_2016 <- read_sf("./Shapefiles/VotingPrecincts/HistoricalVotin
 maricopa_precincts_2016 <- st_transform(maricopa_precincts_2016, 4326)
 ```
 
-## R Markdown
+## Questions  
+1. How did Maricopa Co. voted as a whole this election as compared to 2020?  
+2. How did Maricopa Co. Congressional Districts voted this election as compared to 2016?
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r df slimming, echo = FALSE}
+```{r extraction fns, echo = FALSE}
 # extracting congressional candidate per precinct
-congress_2020 <- function(results, contest_name = "ContestName"){
+congress_2020 <- function(results){
   voteshare_df <- results %>%
-    filter(str_detect(contest_name, "^US Rep"),
+    filter(str_detect(ContestName, "^US Rep"),
            CandidateAffiliation %in% c("REP", "DEM")) %>%
-    select(PrecinctId, PrecinctName, contest_name, CandidateName, Votes, `Votes_EARLY VOTE`, `Votes_ELECTION DAY`, Votes_PROVISIONAL, `Turnout_EARLY VOTE`, `Turnout_ELECTION DAY`, Registered, Turnout, TurnoutPerc) %>%
+    select(PrecinctId, PrecinctName, ContestName, CandidateName, Votes, `Votes_EARLY VOTE`, `Votes_ELECTION DAY`, Votes_PROVISIONAL, `Turnout_EARLY VOTE`, `Turnout_ELECTION DAY`, Registered, Turnout, TurnoutPerc) %>%
     na.omit()
 }
 
-congress_2016 <- function(results, contest_name = "CONTEST_TYPE"){
+congress_2016 <- function(results, CONTEST_FULL_NAME){
   voteshare_df <- results %>%
-    filter(str_detect(contest_name, "^US Rep"),
+    filter(str_detect(CONTEST_FULL_NAME, "^US Rep"),
            candidate_party_id %in% c(1, 2)) %>%
-    select(PRECINCT_NAME, contest_name, CANDIDATE_FULL_NAME, TOTAL, CONTEST_TOTAL) %>%
+    select(PRECINCT_NAME, CONTEST_FULL_NAME, CANDIDATE_FULL_NAME, TOTAL, CONTEST_TOTAL) %>%
     na.omit()
 }
 
-# extracting congressional race per precinct 
+# extracting congressional race per precinct
+## separate functions have to be written for 2016 and 2020 because the reporting format was different
 cd_per_precinct <- function(cd_results){
   cd_per_precinct <- cd_results %>%
     select(PrecinctId, PrecinctName, ContestName) %>%
     unique()
+  cd_per_precinct <- cd_per_precinct %>%
+    group_by(PrecinctName) %>%
+    mutate(PrecinctId = str_pad(PrecinctId, width = 4, side = "left", pad = 0),
+           PrecinctName = substr(PrecinctName, 6, nchar(PrecinctName)),
+           ContestName = substr(ContestName, 16, 16))
+  colnames(cd_per_precinct) <- c("PrecinctId", "PrecinctName", "CD")
+  cd_per_precinct
+}
+
+cd_per_precinct_2016 <- function(cd_results){
+  cd_per_precinct <- cd_results %>%
+    select(PRECINCT_NAME, CONTEST_FULL_NAME) %>%
+    unique()
+  cd_per_precinct <- cd_per_precinct %>%
+    group_by(PRECINCT_NAME) %>%
+    mutate(PRECINCT_ID = substr(PRECINCT_NAME, 1,4),
+           PRECINCT_NAME = substr(PRECINCT_NAME, 6, nchar(PRECINCT_NAME)),
+           CONTEST_FULL_NAME = substr(CONTEST_FULL_NAME, 15, 15)) %>%
+    ungroup()
+  colnames(cd_per_precinct) <- c("PrecinctName", "CD", "PrecinctId")
+  cd_per_precinct <- cd_per_precinct[,c(3,1,2)]
   cd_per_precinct
 }
 
@@ -69,6 +89,18 @@ presidential <- function(results){
   voteshare_df
 }
 
+presidential_2016 <- function(results){
+  voteshare_df <- results %>%
+    filter(CONTEST_FULL_NAME == "Presidential Electors",
+           candidate_party_id %in% c(1, 2)) %>%
+    select(PRECINCT_NAME, CANDIDATE_FULL_NAME, TOTAL, CONTEST_TOTAL)
+  voteshare_df <- voteshare_df %>%
+    mutate(PrecinctId = substr(PRECINCT_NAME, 1,4),
+           PrecinctName = substr(PRECINCT_NAME, 6, nchar(PRECINCT_NAME))) %>%
+    select(PrecinctId, PrecinctName, CANDIDATE_FULL_NAME, TOTAL, CONTEST_TOTAL)
+  voteshare_df
+}
+
 candidate_voteshare <- function(results, candidate){
   voteshare_df <- results %>%
     filter(CandidateName == candidate) %>%
@@ -77,19 +109,23 @@ candidate_voteshare <- function(results, candidate){
   
   voteshare_df
 }
+```
+  
+Using the functions above, for example:
 
+```{r extraction, echo=FALSE}
 # latest data dump
 maricopa_2020_11132020_congress <- maricopa_2020_11132020 %>%
   congress_2020()
 
 maricopa_2016_congress <- maricopa_2016 %>%
-  congress_2016(contest_name = "CONTEST_FULL_NAME")
+  congress_2016()
 
 cd_per_precinct_2020 <- maricopa_2020_11132020_congress %>%
   cd_per_precinct()
 
 cd_per_precinct_2016 <- maricopa_2016_congress %>%
-  cd_per_precinct()
+  cd_per_precinct_2016()
 
 maricopa_2020_11132020_narrow <- maricopa_2020_11132020 %>%
   presidential()
@@ -99,14 +135,45 @@ maricopa_2020_dems_111320 <- maricopa_2020_11132020_narrow %>%
 
 maricopa_2020_reps_111320 <- maricopa_2020_11132020_narrow %>%
   candidate_voteshare(., "TRUMP / PENCE")
+
+maricopa_2016_presidential <- maricopa_2016 %>% 
+  presidential_2016()
+
+# attaching congressional district to each precinct
+maricopa_2020_11132020_narrow <- maricopa_2020_11132020_narrow %>%
+  group_by(PrecinctId) %>%
+  mutate(PrecinctId = substr(PrecinctName, 1, 4),
+         PrecinctName = substr(PrecinctName, 6, nchar(PrecinctName)))
+maricopa_2020_11132020_narrow <- inner_join(maricopa_2020_11132020_narrow, cd_per_precinct_2020)
+
+maricopa_2016_presidential <- inner_join(maricopa_2016_presidential, cd_per_precinct_2016)
 ```
 
-## Including Plots
+## Congressional Districts in Maricopa County  
+  
+Aggregating presidential results by congressional districts, we get the following:  
+  
+```{r}
+## Maricopa 2016
+maricopa_2016_presidential_congress <- maricopa_2016_presidential %>%
+  group_by(CD, CANDIDATE_FULL_NAME) %>%
+  summarise(total_votes = sum(CONTEST_TOTAL),
+            votes_candidate = sum(TOTAL)) %>%
+  mutate(votes_pct = round(100*votes_candidate/total_votes),
+         party = substr(CANDIDATE_FULL_NAME, 1, 3))
+colnames(maricopa_2016_presidential_congress) <- c("CD", "Candidate_2016", "total_votes_2016", "votes_candidate_2016", "votes_pct_2016", "party")
 
-You can also embed plots, for example:
+## Maricopa 2020
+maricopa_2020_11132020_presidential_congress <- maricopa_2020_11132020_narrow %>%
+  group_by(CD, CandidateName) %>%
+  summarise(total_votes = sum(Turnout),
+            votes_candidate = sum(Votes)) %>%
+  mutate(votes_pct = round(100*votes_candidate/total_votes),
+         party = ifelse(CandidateName == "BIDEN / HARRIS", "DEM", "REP"))
+colnames(maricopa_2020_11132020_presidential_congress) <- c("CD", "Candidate_2020", "total_votes_2020", "votes_candidate_2020", "votes_pct_2020", "party")
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+## comparing
+maricopa_comparison <- inner_join(maricopa_2020_11132020_presidential_congress, maricopa_2016_presidential_congress)
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
