@@ -1,0 +1,493 @@
+<style> .text { mso-number-format:\@; } </style> <div>
+	<table class="rwd-table" cellspacing="0" rules="all" border="1" id="ContentPlaceHolder1_gvDistrict" style="border-collapse:collapse;">
+		<caption>
+			<b>Voter Registration Totals - Congressional Districts</b>
+		</caption><tr>
+			<th scope="col">&nbsp;</th><th scope="col">STATUS</th><th scope="col">REP</th><th scope="col">DEM</th><th scope="col">LBT</th><th scope="col">OTH</th><th scope="col">#PRCTS</th><th scope="col">TOTALS</th>
+		</tr><tr style="background-color:#E1E6EA;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblPrecinct_0" style="font-weight:bold;">CONGRESSIONAL DISTRICT 1      </span>
+                                            </td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_0" style="font-weight:bold;">ACTIVE</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_0">89</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_0">702</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_0">10</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_0">616</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">
+                                        <span id="ContentPlaceHolder1_gvDistrict_lblPrcts_0">3</span>
+                                        </td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_0">1,417</span>
+                                            </td>
+		</tr><tr style="background-color:White;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">&nbsp;</td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_1" style="font-weight:bold;">INACTIVE</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_1">7</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_1">58</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_1">0</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_1">48</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">&nbsp;</td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_1">113</span>
+                                            </td>
+		</tr><tr style="background-color:#FFFFCC;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">&nbsp;</td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_2" style="font-weight:bold;">PEVL</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_2">52</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_2">427</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_2">6</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_2">281</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">&nbsp;</td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_2">766</span>
+                                            </td>
+		</tr><tr style="background-color:#E1E6EA;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblPrecinct_3" style="font-weight:bold;">CONGRESSIONAL DISTRICT 3      </span>
+                                            </td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_3" style="font-weight:bold;">ACTIVE</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_3">37,331</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_3">53,220</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_3">1,236</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_3">51,495</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">
+                                        <span id="ContentPlaceHolder1_gvDistrict_lblPrcts_3">47</span>
+                                        </td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_3">143,282</span>
+                                            </td>
+		</tr><tr style="background-color:White;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">&nbsp;</td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_4" style="font-weight:bold;">INACTIVE</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_4">3,269</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_4">4,620</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_4">139</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_4">7,842</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">&nbsp;</td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_4">15,870</span>
+                                            </td>
+		</tr><tr style="background-color:#FFFFCC;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">&nbsp;</td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_5" style="font-weight:bold;">PEVL</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_5">28,188</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_5">44,497</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_5">876</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_5">33,616</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">&nbsp;</td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_5">107,177</span>
+                                            </td>
+		</tr><tr style="background-color:#E1E6EA;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblPrecinct_6" style="font-weight:bold;">CONGRESSIONAL DISTRICT 4      </span>
+                                            </td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_6" style="font-weight:bold;">ACTIVE</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_6">20,822</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_6">8,787</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_6">336</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_6">12,878</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">
+                                        <span id="ContentPlaceHolder1_gvDistrict_lblPrcts_6">18</span>
+                                        </td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_6">42,823</span>
+                                            </td>
+		</tr><tr style="background-color:White;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">&nbsp;</td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_7" style="font-weight:bold;">INACTIVE</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_7">1,039</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_7">537</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_7">18</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_7">1,147</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">&nbsp;</td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_7">2,741</span>
+                                            </td>
+		</tr><tr style="background-color:#FFFFCC;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">&nbsp;</td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_8" style="font-weight:bold;">PEVL</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_8">16,506</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_8">7,774</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_8">252</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_8">9,265</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">&nbsp;</td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_8">33,797</span>
+                                            </td>
+		</tr><tr style="background-color:#E1E6EA;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblPrecinct_9" style="font-weight:bold;">CONGRESSIONAL DISTRICT 5      </span>
+                                            </td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_9" style="font-weight:bold;">ACTIVE</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_9">245,823</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_9">137,632</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_9">5,671</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_9">175,679</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">
+                                        <span id="ContentPlaceHolder1_gvDistrict_lblPrcts_9">128</span>
+                                        </td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_9">564,805</span>
+                                            </td>
+		</tr><tr style="background-color:White;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">&nbsp;</td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_10" style="font-weight:bold;">INACTIVE</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_10">14,452</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_10">9,322</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_10">479</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_10">17,445</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">&nbsp;</td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_10">41,698</span>
+                                            </td>
+		</tr><tr style="background-color:#FFFFCC;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">&nbsp;</td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_11" style="font-weight:bold;">PEVL</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_11">196,938</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_11">120,726</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_11">4,199</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_11">127,840</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">&nbsp;</td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_11">449,703</span>
+                                            </td>
+		</tr><tr style="background-color:#E1E6EA;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblPrecinct_12" style="font-weight:bold;">CONGRESSIONAL DISTRICT 6      </span>
+                                            </td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_12" style="font-weight:bold;">ACTIVE</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_12">208,516</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_12">144,894</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_12">5,036</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_12">166,507</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">
+                                        <span id="ContentPlaceHolder1_gvDistrict_lblPrcts_12">157</span>
+                                        </td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_12">524,953</span>
+                                            </td>
+		</tr><tr style="background-color:White;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">&nbsp;</td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_13" style="font-weight:bold;">INACTIVE</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_13">14,168</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_13">11,969</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_13">529</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_13">22,203</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">&nbsp;</td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_13">48,869</span>
+                                            </td>
+		</tr><tr style="background-color:#FFFFCC;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">&nbsp;</td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_14" style="font-weight:bold;">PEVL</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_14">167,969</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_14">127,314</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_14">3,714</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_14">120,158</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">&nbsp;</td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_14">419,155</span>
+                                            </td>
+		</tr><tr style="background-color:#E1E6EA;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblPrecinct_15" style="font-weight:bold;">CONGRESSIONAL DISTRICT 7      </span>
+                                            </td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_15" style="font-weight:bold;">ACTIVE</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_15">52,497</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_15">164,500</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_15">2,952</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_15">120,715</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">
+                                        <span id="ContentPlaceHolder1_gvDistrict_lblPrcts_15">112</span>
+                                        </td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_15">340,664</span>
+                                            </td>
+		</tr><tr style="background-color:White;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">&nbsp;</td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_16" style="font-weight:bold;">INACTIVE</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_16">6,095</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_16">17,200</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_16">420</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_16">22,200</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">&nbsp;</td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_16">45,915</span>
+                                            </td>
+		</tr><tr style="background-color:#FFFFCC;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">&nbsp;</td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_17" style="font-weight:bold;">PEVL</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_17">38,779</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_17">137,639</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_17">2,071</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_17">77,638</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">&nbsp;</td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_17">256,127</span>
+                                            </td>
+		</tr><tr style="background-color:#E1E6EA;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblPrecinct_18" style="font-weight:bold;">CONGRESSIONAL DISTRICT 8      </span>
+                                            </td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_18" style="font-weight:bold;">ACTIVE</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_18">228,293</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_18">139,058</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_18">4,644</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_18">165,944</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">
+                                        <span id="ContentPlaceHolder1_gvDistrict_lblPrcts_18">143</span>
+                                        </td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_18">537,939</span>
+                                            </td>
+		</tr><tr style="background-color:White;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">&nbsp;</td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_19" style="font-weight:bold;">INACTIVE</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_19">13,835</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_19">10,727</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_19">394</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_19">19,957</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">&nbsp;</td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_19">44,913</span>
+                                            </td>
+		</tr><tr style="background-color:#FFFFCC;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">&nbsp;</td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_20" style="font-weight:bold;">PEVL</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_20">184,015</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_20">122,529</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_20">3,395</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_20">119,566</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">&nbsp;</td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_20">429,505</span>
+                                            </td>
+		</tr><tr style="background-color:#E1E6EA;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblPrecinct_21" style="font-weight:bold;">CONGRESSIONAL DISTRICT 9      </span>
+                                            </td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_21" style="font-weight:bold;">ACTIVE</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_21">133,199</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_21">172,414</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_21">5,457</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_21">153,056</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">
+                                        <span id="ContentPlaceHolder1_gvDistrict_lblPrcts_21">140</span>
+                                        </td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_21">464,126</span>
+                                            </td>
+		</tr><tr style="background-color:White;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">&nbsp;</td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_22" style="font-weight:bold;">INACTIVE</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_22">12,953</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_22">19,577</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_22">801</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_22">28,391</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">&nbsp;</td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_22">61,722</span>
+                                            </td>
+		</tr><tr style="background-color:#FFFFCC;white-space:nowrap;">
+			<td align="center" data-th="Precinct Name" style="text-align:center;">&nbsp;</td><td align="center" data-th="Status" style="text-align:center;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblStatus_23" style="font-weight:bold;">PEVL</span>
+                                            </td><td align="right" data-th="REP" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblRep_23">104,164</span>
+                                            </td><td align="right" data-th="DEM" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblDem_23">149,883</span>
+                                            </td><td align="right" data-th="LBT" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblLBT_23">3,954</span>
+                                            </td><td align="right" data-th="OTH" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblOth_23">108,801</span>
+                                            </td><td align="center" data-th="#PRCTS" style="text-align:center;">&nbsp;</td><td align="right" data-th="TOTALS" style="text-align:right;">
+                                                <span id="ContentPlaceHolder1_gvDistrict_lblTotals_23">366,802</span>
+                                            </td>
+		</tr><tr>
+			<td>
+                                                <table>
+                                                    <tr style="background-color: #e1e6ea;">
+                                                        <td style="text-align:center;"><strong>GRAND TOTALS:</strong></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="text-align:center;">&nbsp;</td>
+                                                    </tr>
+                                                     <tr style="background-color: #ffffcc;text-align:center;">
+                                                        <td>&nbsp;</td>
+                                                    </tr>
+                                                </table>
+                                            </td><td>
+                                                <table>
+                                                    <tr  style="background-color: #e1e6ea;">
+                                                        <td style="text-align:center;">
+                                                            <span id="ContentPlaceHolder1_gvDistrict_lblActive">ACTIVE</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="text-align:center;">
+                                                            <span id="ContentPlaceHolder1_gvDistrict_lblInactive">INACTIVE</span></td>
+                                                    </tr>
+                                                    <tr style="background-color: #ffffcc;">
+                                                         <td style="text-align:center;">
+                                                            <span id="ContentPlaceHolder1_gvDistrict_lblPEVL">PEVL</span></td>
+                                                    </tr>
+                                                </table>
+                                            </td><td>
+                                                <table>
+                                                    <tr  style="background-color: #e1e6ea;">
+                                                        <td style="text-align:right;">
+                                                            <span id="ContentPlaceHolder1_gvDistrict_RepTotals_A">926,570</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="text-align:right;">
+                                                            <span id="ContentPlaceHolder1_gvDistrict_RepTotals_I">65,818</span></td>
+                                                    </tr>
+                                                    <tr style="background-color: #ffffcc;">
+                                                        <td style="text-align:right;"><span id="ContentPlaceHolder1_gvDistrict_RepTotals_P">736,611</span></td>
+                                                    </tr>
+                                                </table>
+                                            </td><td>
+                                                <table>
+                                                    <tr  style="background-color: #e1e6ea;">
+                                                        <td style="text-align:right;">
+                                                            <span id="ContentPlaceHolder1_gvDistrict_DemTotals_A">821,207</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="text-align:right;">
+                                                            <span id="ContentPlaceHolder1_gvDistrict_DemTotals_I">74,010</span></td>
+                                                    </tr>
+                                                     <tr style="background-color: #ffffcc;">
+                                                        <td style="text-align:right;">
+                                                            <span id="ContentPlaceHolder1_gvDistrict_DemTotals_P">710,789</span></td>
+                                                    </tr>
+                                                </table>
+                                            </td><td>
+                                                <table>
+                                                    <tr  style="background-color: #e1e6ea;">
+                                                        <td style="text-align:right;">
+                                                            <span id="ContentPlaceHolder1_gvDistrict_LbtTotals_A">25,342</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="text-align:right;">
+                                                            <span id="ContentPlaceHolder1_gvDistrict_LbtTotals_I">2780</span></td>
+                                                    </tr>
+                                                     <tr style="background-color: #ffffcc;">
+                                                        <td style="text-align:right;">
+                                                            <span id="ContentPlaceHolder1_gvDistrict_LbtTotals_P">18,467</span></td>
+                                                    </tr>
+                                                </table>
+                                            </td><td>
+                                                <table>
+                                                    <tr  style="background-color: #e1e6e1;">
+                                                        <td style="text-align:right;">
+                                                            <span id="ContentPlaceHolder1_gvDistrict_OthTotals_A">846,890</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="text-align:right;">
+                                                            <span id="ContentPlaceHolder1_gvDistrict_OthTotals_I">119,233</span></td>
+                                                    </tr>
+                                                     <tr style="background-color: #ffffcc;">
+                                                        <td style="text-align:right;">
+                                                            <span id="ContentPlaceHolder1_gvDistrict_OthTotals_P">597,165</span></td>
+                                                    </tr>
+                                                </table>
+                                            </td><td>
+                                                <table>
+                                                    <tr  style="background-color: #e1e6ea;">
+                                                        <td style="text-align:center;">
+                                                            <span id="ContentPlaceHolder1_gvDistrict_lblPctTotal">748</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>&nbsp;</td>
+                                                    </tr>
+                                                    <tr style="background-color: #ffffcc;">
+                                                         <td>&nbsp;</td>
+                                                    </tr>
+                                                </table>
+                                            </td><td>
+                                                <table>
+                                                    <tr  style="background-color: #e1e6ea;">
+                                                        <td style="text-align:right;">
+                                                            <span id="ContentPlaceHolder1_gvDistrict_Totals_A">2,620,009</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="text-align:right;">
+                                                            <span id="ContentPlaceHolder1_gvDistrict_Totals_I">261,841</span></td>
+                                                    </tr>
+                                                     <tr style="background-color: #ffffcc;">
+                                                        <td style="text-align:right;">
+                                                            <span id="ContentPlaceHolder1_gvDistrict_Totals_P">2,063,032</span></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+		</tr>
+	</table>
+</div>

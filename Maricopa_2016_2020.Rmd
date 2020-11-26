@@ -20,10 +20,10 @@ maricopa_2020_11132020 <- read_tsv("Maricopa_2020_Provisional_111320.txt")
 maricopa_2016 <- read_tsv("Maricopa_2016.txt")
 
 ## Shapefiles
-maricopa_precincts_2018 <- read_sf("./Shapefiles/VotingPrecincts/VotingPrecincts.shp")
-maricopa_precincts_2018 <- st_transform(maricopa_precincts_2018, 4326)
-maricopa_precincts_2016 <- read_sf("./Shapefiles/VotingPrecincts/HistoricalVotingPrecincts_12thru16.shp")
-maricopa_precincts_2016 <- st_transform(maricopa_precincts_2016, 4326)
+# maricopa_precincts_2018 <- read_sf("./Shapefiles/VotingPrecincts/VotingPrecincts.shp")
+# maricopa_precincts_2018 <- st_transform(maricopa_precincts_2018, 4326)
+# maricopa_precincts_2016 <- read_sf("./Shapefiles/VotingPrecincts/HistoricalVotingPrecincts_12thru16.shp")
+# maricopa_precincts_2016 <- st_transform(maricopa_precincts_2016, 4326)
 ```
 
 ## Questions  
@@ -52,14 +52,14 @@ congress_2016 <- function(results, CONTEST_FULL_NAME){
 ## separate functions have to be written for 2016 and 2020 because the reporting format was different
 cd_per_precinct <- function(cd_results){
   cd_per_precinct <- cd_results %>%
-    select(PrecinctId, PrecinctName, ContestName) %>%
+    select(PrecinctName, ContestName) %>%
     unique()
   cd_per_precinct <- cd_per_precinct %>%
     group_by(PrecinctName) %>%
-    mutate(PrecinctId = str_pad(PrecinctId, width = 4, side = "left", pad = 0),
+    mutate(PrecinctId = substr(PrecinctName, 1, 4),
            PrecinctName = substr(PrecinctName, 6, nchar(PrecinctName)),
            ContestName = substr(ContestName, 16, 16))
-  colnames(cd_per_precinct) <- c("PrecinctId", "PrecinctName", "CD")
+  colnames(cd_per_precinct) <- c("PrecinctName", "CD", "PrecinctId")
   cd_per_precinct
 }
 
@@ -85,6 +85,26 @@ presidential <- function(results){
            CandidateId %in% c(1, 2)) %>%
     select(PrecinctId, PrecinctName, CandidateName, Votes, `Votes_EARLY VOTE`, `Votes_ELECTION DAY`, Votes_PROVISIONAL, `Turnout_EARLY VOTE`, `Turnout_ELECTION DAY`, Registered, Turnout, TurnoutPerc) %>%
     na.omit()
+  voteshare_df <- voteshare_df %>%
+    group_by(PrecinctId) %>%
+    mutate(PrecinctId = substr(PrecinctName, 1, 4),
+           PrecinctName = substr(PrecinctName, 6, nchar(PrecinctName))) %>%
+    ungroup()
+  
+  voteshare_df
+}
+
+presidential_2020_other_candidates <- function(results){
+  voteshare_df <- results %>%
+    filter(ContestName == "Presidential Electors",
+           !CandidateId %in% c(1, 2)) %>%
+    select(PrecinctId, PrecinctName, CandidateName, Votes, `Votes_EARLY VOTE`, `Votes_ELECTION DAY`, Votes_PROVISIONAL, `Turnout_EARLY VOTE`, `Turnout_ELECTION DAY`, Registered, Turnout, TurnoutPerc) %>%
+    na.omit()
+  voteshare_df <- voteshare_df %>%
+    group_by(PrecinctId) %>%
+    mutate(PrecinctId = substr(PrecinctName, 1, 4),
+           PrecinctName = substr(PrecinctName, 6, nchar(PrecinctName))) %>%
+    ungroup()
   
   voteshare_df
 }
@@ -93,6 +113,18 @@ presidential_2016 <- function(results){
   voteshare_df <- results %>%
     filter(CONTEST_FULL_NAME == "Presidential Electors",
            candidate_party_id %in% c(1, 2)) %>%
+    select(PRECINCT_NAME, CANDIDATE_FULL_NAME, TOTAL, CONTEST_TOTAL)
+  voteshare_df <- voteshare_df %>%
+    mutate(PrecinctId = substr(PRECINCT_NAME, 1,4),
+           PrecinctName = substr(PRECINCT_NAME, 6, nchar(PRECINCT_NAME))) %>%
+    select(PrecinctId, PrecinctName, CANDIDATE_FULL_NAME, TOTAL, CONTEST_TOTAL)
+  voteshare_df
+}
+
+presidential_2016_other_candidates <- function(results){
+  voteshare_df <- results %>%
+    filter(CONTEST_FULL_NAME == "Presidential Electors",
+           !candidate_party_id %in% c(1, 2)) %>%
     select(PRECINCT_NAME, CANDIDATE_FULL_NAME, TOTAL, CONTEST_TOTAL)
   voteshare_df <- voteshare_df %>%
     mutate(PrecinctId = substr(PRECINCT_NAME, 1,4),
@@ -139,19 +171,31 @@ maricopa_2020_reps_111320 <- maricopa_2020_11132020_narrow %>%
 maricopa_2016_presidential <- maricopa_2016 %>% 
   presidential_2016()
 
-# attaching congressional district to each precinct
-maricopa_2020_11132020_narrow <- maricopa_2020_11132020_narrow %>%
-  group_by(PrecinctId) %>%
-  mutate(PrecinctId = substr(PrecinctName, 1, 4),
-         PrecinctName = substr(PrecinctName, 6, nchar(PrecinctName)))
 maricopa_2020_11132020_narrow <- inner_join(maricopa_2020_11132020_narrow, cd_per_precinct_2020)
 
 maricopa_2016_presidential <- inner_join(maricopa_2016_presidential, cd_per_precinct_2016)
+
+# non dem/rep
+maricopa_2020_11132020_3parties <- maricopa_2020_11132020 %>%
+  presidential_2020_other_candidates() %>%
+  group_by(PrecinctId, PrecinctName) %>%
+  summarise(total_3p_votes = sum(Votes))
+maricopa_2020_11132020_3parties <- inner_join(maricopa_2020_11132020_3parties, cd_per_precinct_2020)
+
+maricopa_2016_3parties <- maricopa_2016 %>%
+  presidential_2016_other_candidates() %>%
+  group_by(PrecinctId, PrecinctName) %>%
+  summarise(total_3p_votes = sum(TOTAL))
+maricopa_2016_3parties <- inner_join(maricopa_2016_3parties, cd_per_precinct_2016)
 ```
 
 ## Congressional Districts in Maricopa County  
   
 Aggregating presidential results by congressional districts, we get the following:  
+  
+1. Republican vote share has remained remarkably steady between 2016 and 2020.  
+2. Both sides increased turnout.  
+3. Democrats won not by peeling off Republicans but by peeling off third party voters whose vote share has collapsed unlike elsewhere. 
   
 ```{r}
 ## Maricopa 2016
@@ -163,6 +207,10 @@ maricopa_2016_presidential_congress <- maricopa_2016_presidential %>%
          party = substr(CANDIDATE_FULL_NAME, 1, 3))
 colnames(maricopa_2016_presidential_congress) <- c("CD", "Candidate_2016", "total_votes_2016", "votes_candidate_2016", "votes_pct_2016", "party")
 
+maricopa_2016_3parties_congress <- maricopa_2016_3parties %>%
+  group_by(CD) %>%
+  summarize(total_3p_votes_2016 = sum(total_3p_votes))
+
 ## Maricopa 2020
 maricopa_2020_11132020_presidential_congress <- maricopa_2020_11132020_narrow %>%
   group_by(CD, CandidateName) %>%
@@ -172,8 +220,50 @@ maricopa_2020_11132020_presidential_congress <- maricopa_2020_11132020_narrow %>
          party = ifelse(CandidateName == "BIDEN / HARRIS", "DEM", "REP"))
 colnames(maricopa_2020_11132020_presidential_congress) <- c("CD", "Candidate_2020", "total_votes_2020", "votes_candidate_2020", "votes_pct_2020", "party")
 
+maricopa_2020_11132020_3parties_congress <- maricopa_2020_11132020_3parties %>%
+  group_by(CD) %>%
+  summarize(total_3p_votes_2020 = sum(total_3p_votes))
+
+
 ## comparing
 maricopa_comparison <- inner_join(maricopa_2020_11132020_presidential_congress, maricopa_2016_presidential_congress)
+maricopa_comparison <- inner_join(maricopa_comparison, maricopa_2016_3parties_congress)
+maricopa_comparison <- inner_join(maricopa_comparison, maricopa_2020_11132020_3parties_congress)
+maricopa_comparison <- maricopa_comparison %>%
+  select(CD, party, total_votes_2016, total_votes_2020, votes_candidate_2016, votes_candidate_2020, votes_pct_2016, votes_pct_2020, total_3p_votes_2016, total_3p_votes_2020)
 
 ```
+  
+The next questions to ask are:  
+1. Who registered more newer voters between 2018 and 2020? 
+2. Where did the new voters come from?  
+  
+```{r}
+maricopa_2016_voter_registration <- maricopa_2016 %>%
+  filter(contest_id == 0) %>%
+  select(PRECINCT_NAME, CONTEST_TOTAL) %>%
+  unique() %>%
+  mutate(PRECINCT_ID = substr(PRECINCT_NAME, 1, 4),
+         PRECINCT_NAME = substr(PRECINCT_NAME, 6, nchar(PRECINCT_NAME)))
+colnames(maricopa_2016_voter_registration) <- c("PrecinctName", "PrecinctRegistered", "PrecinctId")
+maricopa_2016_voter_registration <- inner_join(maricopa_2016_voter_registration, cd_per_precinct_2016)
+maricopa_2016_voter_registration_CD <- maricopa_2016_voter_registration %>%
+  group_by(CD) %>%
+  summarise(registered_voters_2016 = sum(PrecinctRegistered))
 
+maricopa_2020_11132020_voter_registration <- maricopa_2020_11132020 %>%
+  select(PrecinctName, PrecinctRegistered) %>%
+  unique() %>%
+  mutate(PrecinctId = substr(PrecinctName, 1, 4),
+         PrecinctName = substr(PrecinctName, 6, nchar(PrecinctName)))
+maricopa_2020_voter_registration <- inner_join(maricopa_2020_11132020_voter_registration, cd_per_precinct_2020)
+maricopa_2020_voter_registration_CD <- maricopa_2020_voter_registration %>%
+  group_by(CD) %>%
+  summarise(registered_voters_2020 = sum(PrecinctRegistered))
+
+maricopa_voter_comparison_CD <- inner_join(maricopa_2020_voter_registration_CD, maricopa_2016_voter_registration_CD)
+maricopa_voter_comparison_CD <- maricopa_voter_comparison_CD %>%
+  mutate(gains = registered_voters_2020 - registered_voters_2016,
+         gains_pct = round(gains/registered_voters_2016, 2))
+```
+  
