@@ -18,19 +18,15 @@ library(plotly)
 
 # reading in data
 ## Maricopa Co. data dump
-maricopa_2020_11132020 <- read_tsv("Maricopa_2020_Provisional_111320.txt")
-maricopa_2016 <- read_tsv("Maricopa_2016.txt")
+maricopa_2020_11132020 <- read_tsv("./ElectionResults/Maricopa_2020_Provisional_111320.txt")
+maricopa_2016 <- read_tsv("./ElectionResults/Maricopa_2016.txt")
 
 ## Maricopa Co. Voter Registration by Party
-maricopa_2016_party_voter_registration <- read_csv("MaricopaCounty_2016_VoterRegPartyBreakdown.csv")
-maricopa_2020_party_voter_registration <- read_csv("MaricopaCounty_2020_VoterRegPartyBreakdown.csv")
+maricopa_2016_party_voter_registration <- read_csv("./VoterRegistration/MaricopaCounty_2016_VoterRegPartyBreakdown.csv")
+maricopa_2020_party_voter_registration <- read_csv("./VoterRegistration/MaricopaCounty_2020_VoterRegPartyBreakdown.csv")
 
 
 ## Shapefiles
-maricopa_precincts_2018 <- read_sf("./Shapefiles/VotingPrecincts/VotingPrecincts.shp")
-maricopa_precincts_2018 <- st_transform(maricopa_precincts_2018, 4326)
-maricopa_precincts_2016 <- read_sf("./Shapefiles/VotingPrecincts/HistoricalVotingPrecincts_12thru16.shp")
-maricopa_precincts_2016 <- st_transform(maricopa_precincts_2016, 4326)
 maricopa_cd <- read_sf("./Shapefiles/CD/MaricopaCD.shp")
 maricopa_cd <- st_transform(maricopa_cd, 4326)
 colnames(maricopa_cd)[1] <- "CD"
