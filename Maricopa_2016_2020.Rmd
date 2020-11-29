@@ -11,10 +11,10 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(leaflet)
 library(sf)
-library(RColorBrewer)
 library(ggplot2)
-library(DT)
 library(mapboxapi)
+library(ggalt)
+library(plotly)
 
 # reading in data
 ## Maricopa Co. data dump
@@ -35,15 +35,18 @@ maricopa_cd <- read_sf("./Shapefiles/CD/MaricopaCD.shp")
 maricopa_cd <- st_transform(maricopa_cd, 4326)
 colnames(maricopa_cd)[1] <- "CD"
 ```
-
+  
+[_source code_](https://github.com/westerleyy/maricopa_az)  
+  
+  
 On October 6, 2020, the New York Times published an [article](https://www.nytimes.com/2020/10/06/opinion/biden-trump-bellwether-counties-.html?searchResultPosition=1) outlining the 10 bellwether counties for the 2020 Presidential elections. On the list was Maricopa County, AZ, which accounts for almost two-thirds of Arizona's population. As it turned out, Arizona did become a battleground state the President-Elect Biden flipped from Republican to Democratic, and Maricopa County provided him with the votes to do so.  
   
 Now that the dust has settled somewhat, what we want to know are:  
-1. How did Maricopa Co. voted as a whole this election as compared to 2016?  
+1. How did Maricopa Co. vote as a whole this election as compared to 2016?  
 2. Did Maricopa Co.'s  8 congressional  districts vote very differently from one another?  
-3. How many new voters were registered between 2016 and 2020, and in which congressional districts can they be found?
+3. How many voters are registered to vote, and what are their party affiliations?
   
-Parts of this analysis are scaled to Maricopa County's 8 congressional districts to be consistent across electoral cycles, even though they are of different sizes. This is because Maricopa County is further divided into more than 700 electoral precincts. Ideally, we would compare precincts over the two elections. Complicating this effort, however, is the fact that the number of precincts have increased since 2016 and the boundaries have changed. What has remained constant, however, are the boundaries of congressional districts. Furthermore, the Maricopa County Recorder's Office and the AZ Secretary of State keep records on voter registration by congressional districts.   
+Parts of this analysis are scaled to Maricopa County's 8 congressional districts even though they are of different sizes. This is because Maricopa County is further divided into more than 700 electoral precincts. Ideally, I would compare precincts over the two elections. Complicating this effort, however, is the fact that the number of precincts have increased since 2016 and the boundaries have changed. What has remained constant, however, are the boundaries of congressional districts. Furthermore, the Maricopa County Recorder's Office and the AZ Secretary of State keep records on voter registration by congressional districts.   
 
 ```{r extraction fns, echo = FALSE}
 # extracting congressional candidate per precinct
@@ -202,10 +205,36 @@ maricopa_2016_3parties <- maricopa_2016 %>%
 maricopa_2016_3parties <- inner_join(maricopa_2016_3parties, cd_per_precinct_2016)
 ```
 
-### Mapping the Vote  
+### Mapping and Charting the Vote  
   
 Using the `mapboxapi` and `leaflet` packages in R, shapefiles of congressional districts in Arizona and election results downloaded from the Maricopa County Recorder Office's website, I was able to produce the following map. The map aggregates results from the Presidential Elections in both 2016 and 2020 at the geographical scale of congressional districts. The colors represent the percentage of votes obtained by each candidate pair.   
 ```{r, map, echo = FALSE, message=FALSE}
+## Maricopa 2016
+maricopa_2016_presidential_congress <- maricopa_2016_presidential %>%
+  group_by(CD, CANDIDATE_FULL_NAME) %>%
+  summarise(total_votes = sum(CONTEST_TOTAL),
+            votes_candidate = sum(TOTAL)) %>%
+  mutate(votes_pct = round(100*votes_candidate/total_votes),
+         party = substr(CANDIDATE_FULL_NAME, 1, 3))
+colnames(maricopa_2016_presidential_congress) <- c("CD", "Candidate_2016", "total_votes_2016", "votes_candidate_2016", "votes_pct_2016", "party")
+
+maricopa_2016_3parties_congress <- maricopa_2016_3parties %>%
+  group_by(CD) %>%
+  summarize(total_3p_votes_2016 = sum(total_3p_votes))
+
+## Maricopa 2020
+maricopa_2020_11132020_presidential_congress <- maricopa_2020_11132020_narrow %>%
+  group_by(CD, CandidateName) %>%
+  summarise(total_votes = sum(Turnout),
+            votes_candidate = sum(Votes)) %>%
+  mutate(votes_pct = round(100*votes_candidate/total_votes),
+         party = ifelse(CandidateName == "BIDEN / HARRIS", "DEM", "REP"))
+colnames(maricopa_2020_11132020_presidential_congress) <- c("CD", "Candidate_2020", "total_votes_2020", "votes_candidate_2020", "votes_pct_2020", "party")
+
+maricopa_2020_11132020_3parties_congress <- maricopa_2020_11132020_3parties %>%
+  group_by(CD) %>%
+  summarize(total_3p_votes_2020 = sum(total_3p_votes))
+
 ## joining elections data
 maricopa_2016_rep <- maricopa_2016_presidential_congress %>%
   filter(party == "REP")
@@ -223,9 +252,7 @@ maricopa_cd_2020_dem <- inner_join(maricopa_cd, maricopa_2020_dem)
 
 ## color bins
 bins <- c(0, 20, 30, 40, 50, 60, 70, 80, 100)
-rep16_pal <- colorBin("Reds", domain = maricopa_2016_rep$votes_pct_2016, bins = bins)
 rep20_pal <- colorBin("Reds", domain = maricopa_2020_rep$votes_pct_2020, bins = bins)
-dem16_pal <- colorBin("Blues", domain = maricopa_2016_dem$votes_pct_2016, bins = bins)
 dem20_pal <- colorBin("Blues", domain = maricopa_2020_dem$votes_pct_2020, bins = bins)
 
 ## geolocating phoenix
@@ -262,64 +289,76 @@ maricopa_map <- leaflet() %>%
   hideGroup(c("Republicans - 2016", "Democrats - 2016", "Republicans - 2020", "Democrats - 2020")) %>%
   setView(lng = phoenix[1], lat = phoenix[2], zoom = 8.5)
 
-
+maricopa_map
 ```  
   
-What we can observe from this map is that for the most part, electoral support for Trump has remained steady between 2016 and 2020 in all congressional districts. What has appeared to happen is a strengthening of support for the Democrats, especially in Congressional Districts 3, 5, and 8, at the expense of third-party candidates such as the Libertarians.    
-
-## Congressional Districts in Maricopa County  
+Expressed as a dot and dumbbell plot:  
   
-Aggregating presidential results by congressional districts, we get the following:  
-  
-1. Republican vote share has remained remarkably steady between 2016 and 2020.  
-2. Both sides increased turnout.  
-3. Democrats won not by peeling off Republicans but by peeling off third party voters whose vote share has collapsed unlike elsewhere. 
-  
-```{r, echo = FALSE}
-## Maricopa 2016
-maricopa_2016_presidential_congress <- maricopa_2016_presidential %>%
-  group_by(CD, CANDIDATE_FULL_NAME) %>%
-  summarise(total_votes = sum(CONTEST_TOTAL),
-            votes_candidate = sum(TOTAL)) %>%
-  mutate(votes_pct = round(100*votes_candidate/total_votes),
-         party = substr(CANDIDATE_FULL_NAME, 1, 3))
-colnames(maricopa_2016_presidential_congress) <- c("CD", "Candidate_2016", "total_votes_2016", "votes_candidate_2016", "votes_pct_2016", "party")
-
-maricopa_2016_3parties_congress <- maricopa_2016_3parties %>%
-  group_by(CD) %>%
-  summarize(total_3p_votes_2016 = sum(total_3p_votes))
-
-## Maricopa 2020
-maricopa_2020_11132020_presidential_congress <- maricopa_2020_11132020_narrow %>%
-  group_by(CD, CandidateName) %>%
-  summarise(total_votes = sum(Turnout),
-            votes_candidate = sum(Votes)) %>%
-  mutate(votes_pct = round(100*votes_candidate/total_votes),
-         party = ifelse(CandidateName == "BIDEN / HARRIS", "DEM", "REP"))
-colnames(maricopa_2020_11132020_presidential_congress) <- c("CD", "Candidate_2020", "total_votes_2020", "votes_candidate_2020", "votes_pct_2020", "party")
-
-maricopa_2020_11132020_3parties_congress <- maricopa_2020_11132020_3parties %>%
-  group_by(CD) %>%
-  summarize(total_3p_votes_2020 = sum(total_3p_votes))
-
-
+```{r dumbbell plot, echo = FALSE, message=FALSE, warning=FALSE}
 ## comparing
 maricopa_comparison <- inner_join(maricopa_2020_11132020_presidential_congress, maricopa_2016_presidential_congress)
 maricopa_comparison <- inner_join(maricopa_comparison, maricopa_2016_3parties_congress)
 maricopa_comparison <- inner_join(maricopa_comparison, maricopa_2020_11132020_3parties_congress)
 maricopa_comparison <- maricopa_comparison %>%
   select(CD, party, total_votes_2016, total_votes_2020, votes_candidate_2016, votes_candidate_2020, votes_pct_2016, votes_pct_2020, total_3p_votes_2016, total_3p_votes_2020)
+maricopa_comparison <- maricopa_comparison %>%
+  mutate(`Other 2016` = round(100*total_3p_votes_2016/total_votes_2016),
+         `Other 2020` = round(100*total_3p_votes_2020/total_votes_2020))
+maricopa_comparison_3p <- maricopa_comparison %>%
+  select(CD, `Other 2016`,`Other 2020`)
+  
 
+### converting CD into factor
+maricopa_comparison$CD <- factor(maricopa_comparison$CD)
+maricopa_comparison_3p$CD <- factor(maricopa_comparison_3p$CD)
+maricopa_comparison_dem <- maricopa_comparison %>%
+  filter(party == "DEM")
+maricopa_comparison_dem_long <- maricopa_comparison_dem %>%
+  select(CD, votes_pct_2016, votes_pct_2020)
+colnames(maricopa_comparison_dem_long) <- c("CD", "Dem 2016", "Dem 2020")
+maricopa_comparison_dem_long <- pivot_longer(data = maricopa_comparison_dem_long, cols = c(`Dem 2016`, `Dem 2020`))
+
+maricopa_comparison_rep <- maricopa_comparison %>%
+  filter(party == "REP")
+maricopa_comparison_rep_long <- maricopa_comparison_rep %>%
+  select(CD, votes_pct_2016, votes_pct_2020)
+colnames(maricopa_comparison_rep_long) <- c("CD", "Rep 2016", "Rep 2020")
+maricopa_comparison_rep_long <- pivot_longer(data = maricopa_comparison_rep_long, cols = c(`Rep 2016`, `Rep 2020`))
+
+maricopa_comparison_3p_long <- maricopa_comparison_3p %>%
+  pivot_longer(cols = c(`Other 2016`,`Other 2020`))%>%
+  unique()
+
+maricopa_comparison_long <- rbind(maricopa_comparison_dem_long, maricopa_comparison_rep_long, maricopa_comparison_3p_long)
+
+
+## plot
+ggplot(maricopa_comparison_dem, aes(y = CD)) +
+  geom_point(data = maricopa_comparison_long, aes(x = value, color = name), size = 2) + 
+  scale_color_manual(name = "", values = c("#BDC9E1", "#1C9099", "#CCCCCC", "#636363",  "#FDCC8A", "#E34A33")) +
+  geom_dumbbell(data = maricopa_comparison_dem, aes(x = votes_pct_2016, xend = votes_pct_2020),
+                colour_x = "#bdc9e1", size = 2, colour_xend = "#1c9099", colour = "#e3e3e1") + 
+  geom_dumbbell(data = maricopa_comparison_rep, aes(x = votes_pct_2016, xend = votes_pct_2020),
+                colour_x = "#fdcc8a", size = 2, colour_xend = "#e34a33", colour = "#e3e3e1") +
+  geom_dumbbell(data = maricopa_comparison_3p, aes(x = `Other 2016`, xend = `Other 2020`),
+                colour_x = "#CCCCCC", size = 2, colour_xend = "#636363", colour = "#e3e3e1") +
+  labs(x = "Vote Share (%)", y = "Congressional District", title = "Vote Share by Congressional Districts") + 
+  theme_minimal()
+```
+  
+What we can observe from this map is that for the most part, electoral support for Trump has remained steady between 2016 and 2020 in all congressional districts. What has appeared to happen is a strengthening of support for the Democrats, especially in Congressional Districts 5, and 9, at the expense of third-party candidates such as the Libertarians. On the other hand, Republican vote share has remained remarkable steady between 2016 and 2020.  
+  
+It is pretty clear that majority-Republican congressional districts remained solidly so, and the Democrats did not succeed in flipping any congressional districts to their favor. The implication here is that it is impossible to tell if these Democrat-converts in 2020 will remain Democrats in the future.    
+  
+```{r, eval = FALSE, echo=FALSE}
 maricopa_comparison %>%
   kbl() %>%
   kable_minimal()
 ```
   
-The next questions to ask are:  
-1. Who registered more newer voters between 2018 and 2020? 
-2. Where did the new voters come from?  
+To dive a little deeper into this question, I looked at most up-to-date voter registration data, again available from the Maricopa County Recorder's Office. It appears that registered Democratic voters remain in the minority in multiple populous congressional districts.    
   
-```{r, echo = FALSE}
+```{r, voter_reg, echo = FALSE, message=FALSE, warning=FALSE}
 maricopa_2016_voter_registration <- maricopa_2016 %>%
   filter(contest_id == 0) %>%
   select(PRECINCT_NAME, CONTEST_TOTAL) %>%
@@ -346,11 +385,7 @@ maricopa_voter_comparison_CD <- inner_join(maricopa_2020_voter_registration_CD, 
 maricopa_voter_comparison_CD <- maricopa_voter_comparison_CD %>%
   mutate(gains = registered_voters_2020 - registered_voters_2016,
          gains_pct = round(gains/registered_voters_2016, 2))
-```
-  
-Using data from the recorder's office and the secretary of state, I was able to analyze the changes in the number of voter registrations. We can further break it down into party affiliations.  
-  
-```{r}
+
 active_2016_voter_reg <- maricopa_2016_party_voter_registration %>%
   filter(Status == "ACTIVE") %>%
   mutate(OTH = GRN + OTH + LBT) %>%
@@ -376,6 +411,35 @@ active_voter_reg_comparison <- active_voter_reg_comparison %>%
          Totals = Totals_20 - Totals_16) %>%
   select(CD, Rep, Dem, Oth, Totals)
 
+maricopa_2020_voter_registration_CD_long <- active_2020_voter_reg %>%
+  select(CD, Rep_20, Dem_20, Others_20)
+maricopa_2020_voter_registration_CD_long$CD <- factor(maricopa_2020_voter_registration_CD_long$CD, 
+                                                      levels = maricopa_2020_voter_registration_CD_long$CD)
+colnames(maricopa_2020_voter_registration_CD_long) <- c("CD", "Rep", "Dem", "Others")
+maricopa_2020_voter_registration_CD_long <- pivot_longer(maricopa_2020_voter_registration_CD_long, cols = Rep:Others)
+colnames(maricopa_2020_voter_registration_CD_long)[3] <- "ActiveVoters"
 
+maricopa_2020_voter_registration_pct_CD_long <- active_2020_voter_reg_pct %>%
+  select(CD, Rep_20, Dem_20, Others_20)
+maricopa_2020_voter_registration_pct_CD_long$CD <- factor(maricopa_2020_voter_registration_pct_CD_long$CD, 
+                                                      levels = maricopa_2020_voter_registration_pct_CD_long$CD)
+colnames(maricopa_2020_voter_registration_pct_CD_long) <- c("CD", "Rep", "Dem", "Others")
+maricopa_2020_voter_registration_pct_CD_long <- pivot_longer(maricopa_2020_voter_registration_pct_CD_long, cols = Rep:Others)
+colnames(maricopa_2020_voter_registration_pct_CD_long)[3] <- "Pct"
+
+maricopa_2020_voter_registration_CD_long <- inner_join(maricopa_2020_voter_registration_CD_long,
+                                                       maricopa_2020_voter_registration_pct_CD_long)
+
+# plotting it all together
+ggplotly(ggplot(maricopa_2020_voter_registration_CD_long, aes(x = Pct, y = CD, color = name, label = ActiveVoters)) + 
+  geom_point(size = 3) + 
+  scale_color_manual(name = "", values = c("#1C9099", "#636363", "#E34A33")) +
+  labs(x = "Active Voters (%)", y = "Congressional District", title = "Active Voters by Congressional Districts", subtitle = "AZ voters are split equally among Democrats, Republicans, and others") + 
+  theme_minimal())
 ```
+  
+### tl;dr  
+  
+It is simple. Democrats still number fewer than Republicans in most congressional districts. For Democrats to outnumber Republicans, they need to peel off enough voters who do not usually identify with either of the two main parties. But this is far from a guaranteed outcome. In other words, Maricopa County, and insofar as it is representative of the state of Arizona, AZ will remain competitive for both parties.
+    
 
