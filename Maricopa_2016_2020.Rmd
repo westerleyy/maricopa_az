@@ -35,7 +35,7 @@ colnames(maricopa_cd)[1] <- "CD"
 [_source code_](https://github.com/westerleyy/maricopa_az)  
   
   
-On October 6, 2020, the New York Times published an [article](https://www.nytimes.com/2020/10/06/opinion/biden-trump-bellwether-counties-.html?searchResultPosition=1) outlining the 10 bellwether counties for the 2020 Presidential elections. On the list was Maricopa County, AZ, which accounts for almost two-thirds of Arizona's population. As it turned out, Arizona did become a battleground state the President-Elect Biden flipped from Republican to Democratic, and Maricopa County provided him with the votes to do so.  
+On October 6, 2020, the New York Times published an [article](https://www.nytimes.com/2020/10/06/opinion/biden-trump-bellwether-counties-.html?searchResultPosition=1) outlining the 10 bellwether counties for the 2020 Presidential elections. On the list was Maricopa County, AZ, which accounts for almost two-thirds of Arizona's population. As it turned out, Arizona did become a battleground state that President-Elect Biden flipped from Republican to Democratic, and Maricopa County provided him with the votes to do so.  
   
 Now that the dust has settled somewhat, what we want to know are:  
 1. How did Maricopa Co. vote as a whole this election as compared to 2016?  
@@ -342,7 +342,7 @@ ggplot(maricopa_comparison_dem, aes(y = CD)) +
   theme_minimal()
 ```
   
-What we can observe from this map is that for the most part, electoral support for Trump has remained steady between 2016 and 2020 in all congressional districts. What has appeared to happen is a strengthening of support for the Democrats, especially in Congressional Districts 5, and 9, at the expense of third-party candidates such as the Libertarians. On the other hand, Republican vote share has remained remarkable steady between 2016 and 2020.  
+What we can observe from this map is that for the most part, electoral support for Trump has remained steady between 2016 and 2020 in all congressional districts. What has appeared to happen is a strengthening of support for the Democrats, especially in Congressional Districts 5 and 9, at the expense of third-party candidates such as the Libertarians. On the other hand, Republican vote share has remained remarkable steady between 2016 and 2020.  
   
 It is pretty clear that majority-Republican congressional districts remained solidly so, and the Democrats did not succeed in flipping any congressional districts to their favor. The implication here is that it is impossible to tell if these Democrat-converts in 2020 will remain Democrats in the future.    
   
