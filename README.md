@@ -11,3 +11,11 @@ So what is Maricopa County and how has it changed over the past few presidential
 2. Did Maricopa County's 8 congressional districts vote very differently from one another?  
 3. How many voters are registered to vote, and what are their party affiliations?  
 4. How has Maricopa County's demographics changed over the years?
+  
+## Data Sources  
+Maricopa County's Recorder Office and the office of the Arizona Secretary of State were the cornerstone of this analysis. I relied largely on the following datasets:  
+1. Certified Nov. 2016 Election results  
+2. Provisional Nov. 2020 Election results (11/13/2020)  
+3. Congressional district boundaries shapefile  
+4. 2016 State of Arizona General Election Voter Registration Report  
+5. 2020 Maricopa County Voter Registration List  
